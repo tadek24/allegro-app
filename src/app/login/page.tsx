@@ -1,17 +1,58 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, Box } from "lucide-react";
+import { ArrowRight, Box, Loader2 } from "lucide-react";
+import { createBrowserClient } from "@supabase/ssr";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [isLogin, setIsLogin] = useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  
+  const router = useRouter();
+  
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL || "https://mock.supabase.co",
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "mock-key"
+  );
 
-  const handleAuth = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Tutaj normalnie byłaby integracja z supabase.auth.signInWithPassword 
-    // lub supabase.auth.signUp z użyciem klienta SSR (createBrowserClient)
-    // na ten moment to makieta UI.
-    window.location.href = "/dashboard";
+    setErrorMsg(null);
+    setLoading(true);
+    
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    
+    if (error) {
+      setErrorMsg("Błędny e-mail lub hasło. Spróbuj ponownie.");
+      setLoading(false);
+    } else {
+      router.push("/dashboard");
+    }
+  };
+
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMsg(null);
+    setLoading(true);
+    
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+    
+    if (error) {
+      setErrorMsg("Ten adres e-mail jest już zajęty lub hasło jest za słabe.");
+      setLoading(false);
+    } else {
+      router.push("/dashboard");
+    }
   };
 
   return (
@@ -60,12 +101,14 @@ export default function LoginPage() {
             {isLogin ? 'Zaloguj się do swojego panelu zarządzania.' : 'Załóż konto, by zintegrować swoje sklepy.'}
           </p>
 
-          <form onSubmit={handleAuth} className="space-y-4">
+          <form onSubmit={isLogin ? handleLogin : handleSignUp} className="space-y-4">
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1.5">Email</label>
               <input 
                 type="email" 
                 required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full bg-white/50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-violet/50 focus:border-brand-violet transition-all"
                 placeholder="name@company.com"
               />
@@ -75,10 +118,18 @@ export default function LoginPage() {
               <input 
                 type="password" 
                 required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full bg-white/50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-violet/50 focus:border-brand-violet transition-all"
                 placeholder="••••••••"
               />
             </div>
+
+            {errorMsg && (
+              <div className="text-red-500 text-sm font-semibold mt-2">
+                {errorMsg}
+              </div>
+            )}
 
             {isLogin && (
               <div className="flex justify-end">
@@ -88,10 +139,17 @@ export default function LoginPage() {
 
             <button 
               type="submit" 
-              className="w-full bg-brand-violet hover:bg-violet-600 text-white font-bold py-3.5 px-4 rounded-xl transition-all flex items-center justify-center gap-2 mt-2 shadow-[0_4px_14px_0_rgba(139,92,246,0.39)]"
+              disabled={loading}
+              className="w-full bg-brand-violet hover:bg-violet-600 text-white font-bold py-3.5 px-4 rounded-xl transition-all flex items-center justify-center gap-2 mt-2 shadow-[0_4px_14px_0_rgba(139,92,246,0.39)] disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              {isLogin ? 'Zaloguj się' : 'Stwórz konto'}
-              <ArrowRight className="w-5 h-5" />
+              {loading ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
+              ) : (
+                <>
+                  {isLogin ? 'Zaloguj się' : 'Stwórz konto'}
+                  <ArrowRight className="w-5 h-5" />
+                </>
+              )}
             </button>
           </form>
 
