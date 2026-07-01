@@ -1,0 +1,80 @@
+{
+  "auctions": [
+    {
+      "id": "1001",
+      "title": "Smartfon Samsung Galaxy S23 8/256GB Czarny",
+      "price": 3199.00,
+      "stock": 15,
+      "sold": 42,
+      "thumbnailUrl": "https://placehold.co/150x150?text=S23"
+    },
+    {
+      "id": "1002",
+      "title": "Słuchawki Apple AirPods Pro 2 (USB-C)",
+      "price": 1099.00,
+      "stock": 5,
+      "sold": 128,
+      "thumbnailUrl": "https://placehold.co/150x150?text=AirPods"
+    },
+    {
+      "id": "1003",
+      "title": "Konsola Sony PlayStation 5 Slim 1TB",
+      "price": 2499.00,
+      "stock": 3,
+      "sold": 14,
+      "thumbnailUrl": "https://placehold.co/150x150?text=PS5"
+    }
+  ],
+  "competitors": [
+    {
+      "id": "c1",
+      "seller": "SuperSklep_PL",
+      "price": 3150.00,
+      "shipping": 0,
+      "deliveryTime": "1-2 dni"
+    },
+    {
+      "id": "c2",
+      "seller": "GigaElectro",
+      "price": 3195.00,
+      "shipping": 9.90,
+      "deliveryTime": "1-2 dni"
+    },
+    {
+      "id": "c3",
+      "seller": "TanioKupisz",
+      "price": 3250.00,
+      "shipping": 0,
+      "deliveryTime": "2-3 dni"
+    }
+  ],
+  "adsMetrics": {
+    "spend": 1250.50,
+    "sales": 18400.00,
+    "cpc": 0.45,
+    "roas": 14.71
+  },
+  "campaigns": [
+    {
+      "id": "camp1",
+      "name": "Smartfony - Top Oferty",
+      "active": true,
+      "dailyBudget": 50,
+      "spend": 35.20
+    },
+    {
+      "id": "camp2",
+      "name": "Słuchawki bezprzewodowe",
+      "active": false,
+      "dailyBudget": 20,
+      "spend": 0
+    },
+    {
+      "id": "camp3",
+      "name": "Konsole i Gry (Weekend)",
+      "active": true,
+      "dailyBudget": 100,
+      "spend": 82.50
+    }
+  ]
+}
