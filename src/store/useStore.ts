@@ -42,6 +42,10 @@ interface AppState {
   togglePromo: (auctionId: string, promoId: string) => void;
   availablePromos: PromoOption[];
   
+  // Integracja
+  isIntegrated: boolean;
+  setIntegrated: (val: boolean) => void;
+  
   // Wiadomości
   threads: MessageThread[];
   autoresponderEnabled: boolean;
@@ -67,6 +71,10 @@ const mockThreads: MessageThread[] = [
 ];
 
 export const useStore = create<AppState>((set) => ({
+  // Integracja
+  isIntegrated: false,
+  setIntegrated: (val) => set({ isIntegrated: val }),
+
   // Aukcje - inicjalizacja z mockData.json + domyślne rozszerzone pola
   auctions: initialData.auctions.map(a => ({
     ...a,
