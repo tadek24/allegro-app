@@ -1,10 +1,14 @@
+"use client";
+
 import data from "../../../data/mockData.json";
 import MetricCard from "@/components/MetricCard";
 import CampaignRow from "@/components/CampaignRow";
 import { CircleDollarSign, ShoppingCart, Target, TrendingUp } from "lucide-react";
+import { useStore } from "@/store/useStore";
 
 export default function AdsPage() {
-  const { adsMetrics, campaigns } = data;
+  const { adsMetrics } = data; // Metrics from mock JSON
+  const campaigns = useStore(state => state.campaigns); // Campaigns from global state
 
   return (
     <div className="p-4">
@@ -43,7 +47,7 @@ export default function AdsPage() {
 
       <div className="flex items-center justify-between mb-4 px-1">
         <h3 className="font-semibold text-gray-900 dark:text-gray-100">Aktywne kampanie</h3>
-        <button className="text-brand-blue text-sm font-medium">Filtruj</button>
+        <button className="text-brand-violet text-sm font-medium hover:underline">Filtruj</button>
       </div>
       
       <div className="space-y-3 pb-8">
@@ -51,10 +55,6 @@ export default function AdsPage() {
           <CampaignRow
             key={campaign.id}
             id={campaign.id}
-            name={campaign.name}
-            active={campaign.active}
-            dailyBudget={campaign.dailyBudget}
-            spend={campaign.spend}
           />
         ))}
       </div>
