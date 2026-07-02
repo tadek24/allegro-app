@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabase/server';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: Request) {
   const code = new URL(request.url).searchParams.get('code');
   
@@ -34,28 +36,38 @@ export async function GET(request: Request) {
 
     if (!tokenResponse.ok) {
       const errorText = await tokenResponse.text();
-      console.error('Allegro token error:', errorText);
-      return NextResponse.json({ error: 'Błąd wymiany tokenu w Allegro API' }, { status: tokenResponse.status });
+      // Pokazujemy błąd bezpośrednio na ekranie
+      return NextResponse.json({ error: 'Błąd wymiany tokenu w Allegro API', details: errorText }, { status: tokenResponse.status });
     }
 
     const tokenData = await tokenResponse.json();
 
     const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
 
-    if (user) {
-      await supabase
-        .from('allegro_integrations')
-        .upsert({ 
-          user_id: user.id, 
-          access_token: tokenData.access_token, 
-          refresh_token: tokenData.refresh_token 
-        });
+    // Weryfikacja czy użytkownik na pewno istnieje w momencie powrotu
+    if (userError || !user) {
+      return NextResponse.json({ error: 'Zgubiono sesję użytkownika. Zaloguj się ponownie.', details: userError }, { status: 401 });
     }
 
+    // Zapis do bazy z weryfikacją błędu
+    const { error: dbError } = await supabase
+      .from('allegro_integrations')
+      .upsert({ 
+        user_id: user.id, 
+        access_token: tokenData.access_token, 
+        refresh_token: tokenData.refresh_token 
+      });
+
+    // Jeśli baza danych odrzuci zapis, zatrzymujemy proces
+    if (dbError) {
+      return NextResponse.json({ error: 'Błąd zapisu tokenu w bazie Supabase', details: dbError }, { status: 500 });
+    }
+
+    // Tylko jeśli wszystko powyżej poszło idealnie, idziemy do sukcesu
     return NextResponse.redirect(new URL('/dashboard?integration=success', request.url));
+    
   } catch (err: any) {
-    console.error('Callback error:', err);
-    return NextResponse.json({ error: 'Wewnętrzny błąd serwera' }, { status: 500 });
+    return NextResponse.json({ error: 'Wewnętrzny błąd serwera', details: err.message }, { status: 500 });
   }
 }
