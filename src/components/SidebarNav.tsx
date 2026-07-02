@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Home, TrendingUp, BarChart, MessageCircle, Box, LogOut } from "lucide-react";
+import { Home, TrendingUp, BarChart, MessageCircle, Box, LogOut, Settings } from "lucide-react";
 import { createBrowserClient } from "@supabase/ssr";
 
 export default function SidebarNav() {
@@ -61,13 +61,23 @@ export default function SidebarNav() {
             </button>
           </div>
 
-          <button 
-            onClick={handleLogout}
-            className="flex items-center justify-center gap-2 w-full p-3 bg-white border border-gray-200 text-gray-600 hover:text-brand-orange hover:bg-gray-50 transition-none font-semibold text-sm"
-          >
-            <LogOut className="w-4 h-4" />
-            Wyloguj się
-          </button>
+          <div className="flex flex-col gap-2">
+            <Link 
+              href="/dashboard/settings"
+              className="flex items-center gap-2 w-full p-3 bg-white border border-gray-200 text-gray-600 hover:text-brand-orange hover:bg-gray-50 transition-none font-semibold text-sm"
+            >
+              <Settings className="w-4 h-4" />
+              Ustawienia Integracji
+            </Link>
+            
+            <button 
+              onClick={handleLogout}
+              className="flex items-center justify-center gap-2 w-full p-3 bg-white border border-gray-200 text-gray-600 hover:text-brand-orange hover:bg-gray-50 transition-none font-semibold text-sm"
+            >
+              <LogOut className="w-4 h-4" />
+              Wyloguj się
+            </button>
+          </div>
         </div>
       </aside>
     </>
