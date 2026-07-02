@@ -1,21 +1,20 @@
 import { create } from 'zustand';
-import initialData from '../../data/mockData.json';
-
-export interface Auction {
-  id: string;
-  title: string;
-  price: number; // Cena sprzedaży
-  stock: number;
-  sold: number;
-  thumbnailUrl: string;
-  netPurchasePrice: number; // Cena zakupu netto
-  activePromos: string[]; // Identyfikatory włączonych promowań
-}
 
 export interface PromoOption {
   id: string;
   name: string;
   cost: number;
+}
+
+export interface Auction {
+  id: string;
+  title: string;
+  price: number;
+  stock: number;
+  thumbnailUrl: string;
+  // Pola rozszerzone (tylko w UI)
+  netPurchasePrice: number;
+  activePromos: string[];
 }
 
 export interface MessageThread {
@@ -29,14 +28,16 @@ export interface MessageThread {
 export interface Campaign {
   id: string;
   name: string;
+  budget: number;
+  spent: number;
+  roi: number;
   active: boolean;
-  dailyBudget: number;
-  spend: number;
 }
 
 interface AppState {
   // Aukcje
   auctions: Auction[];
+  setAuctions: (auctions: Auction[]) => void;
   updateAuctionPrice: (id: string, newPrice: number) => void;
   updatePurchasePrice: (id: string, newPrice: number) => void;
   togglePromo: (auctionId: string, promoId: string) => void;
@@ -48,6 +49,7 @@ interface AppState {
   
   // Wiadomości
   threads: MessageThread[];
+  setThreads: (threads: MessageThread[]) => void;
   autoresponderEnabled: boolean;
   autoresponderMessage: string;
   toggleAutoresponder: () => void;
@@ -64,23 +66,20 @@ const defaultPromos: PromoOption[] = [
   { id: 'promo3', name: 'Pogrubienie', cost: 4.90 }
 ];
 
-const mockThreads: MessageThread[] = [
-  { id: 't1', buyer: 'JanKowalski', lastMessage: 'Kiedy wyślecie paczkę?', unread: true, isDifficult: false },
-  { id: 't2', buyer: 'MarekNowak_88', lastMessage: 'Zwracam to badziewie, oszuści!!1', unread: true, isDifficult: true },
-  { id: 't3', buyer: 'Anna_Sklep', lastMessage: 'Czy wystawiacie FVAT?', unread: false, isDifficult: false }
-];
-
 export const useStore = create<AppState>((set) => ({
   // Integracja
   isIntegrated: false,
   setIntegrated: (val) => set({ isIntegrated: val }),
 
-  // Aukcje - inicjalizacja z mockData.json + domyślne rozszerzone pola
-  auctions: initialData.auctions.map(a => ({
-    ...a,
-    netPurchasePrice: a.price * 0.6, // Zakładamy domyślny zakup za 60% ceny
-    activePromos: []
-  })),
+  // Aukcje - inicjalizacja jako pusta tablica
+  auctions: [],
+  setAuctions: (apiAuctions) => set({ 
+    auctions: apiAuctions.map(a => ({
+      ...a,
+      netPurchasePrice: a.netPurchasePrice || 0,
+      activePromos: a.activePromos || []
+    }))
+  }),
   availablePromos: defaultPromos,
   updateAuctionPrice: (id, newPrice) => set((state) => ({
     auctions: state.auctions.map(a => a.id === id ? { ...a, price: newPrice } : a)
@@ -102,14 +101,15 @@ export const useStore = create<AppState>((set) => ({
   })),
 
   // Wiadomości
-  threads: mockThreads,
+  threads: [],
+  setThreads: (apiThreads) => set({ threads: apiThreads }),
   autoresponderEnabled: false,
   autoresponderMessage: 'Dziękujemy za wiadomość. Odpowiemy w godzinach 8-16.',
   toggleAutoresponder: () => set((state) => ({ autoresponderEnabled: !state.autoresponderEnabled })),
   setAutoresponderMessage: (msg) => set({ autoresponderMessage: msg }),
 
   // Kampanie
-  campaigns: initialData.campaigns,
+  campaigns: [],
   toggleCampaign: (id) => set((state) => ({
     campaigns: state.campaigns.map(c => c.id === id ? { ...c, active: !c.active } : c)
   }))

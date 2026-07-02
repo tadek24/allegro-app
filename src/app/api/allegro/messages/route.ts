@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabase/server';
 
-export async function GET(request: Request) {
+export async function GET() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -9,7 +9,6 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  // Sprawdzamy integrację klienta
   const { data: integration } = await supabase
     .from('allegro_integrations')
     .select('access_token')
@@ -21,7 +20,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    const response = await fetch('https://api.allegro.pl/sale/offers', {
+    const response = await fetch('https://api.allegro.pl/messaging/threads', {
       headers: {
         'Authorization': `Bearer ${integration.access_token}`,
         'Accept': 'application/vnd.allegro.public.v1+json'
@@ -37,19 +36,16 @@ export async function GET(request: Request) {
 
     const data = await response.json();
     
-    // Mapowanie formatu Allegro na nasz wewnętrzny typ Auction
-    // To jest przykładowe mapowanie na podstawie publicznej dokumentacji Allegro.
-    const auctions = (data.offers || []).map((offer: any) => ({
-      id: offer.id,
-      title: offer.name,
-      price: parseFloat(offer.sellingMode?.price?.amount || "0"),
-      stock: offer.stock?.available || 0,
-      thumbnailUrl: offer.primaryImage?.url || "https://placehold.co/400x400?text=Brak+Zdj%C4%99cia",
-      netPurchasePrice: 0,
-      activePromos: []
+    // Zgodnie z formatem store
+    const threads = (data.threads || []).map((thread: any) => ({
+      id: thread.id,
+      buyer: thread.customer?.login || "Nieznany klient",
+      lastMessage: "Ostatnia wiadomość...", // Allegro zwraca snippet w innej metodzie, mockujemy to dla UI
+      unread: thread.read === false,
+      isDifficult: false
     }));
 
-    return NextResponse.json({ auctions, integrated: true });
+    return NextResponse.json({ threads });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }

@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AllegroManager B2B",
-  description: "Zaawansowane PWA do zarządzania sprzedażą",
+  title: "E-Prom Allegro",
+  description: "Zaawansowane narzędzie do zarządzania sprzedażą na Allegro",
   manifest: "/manifest.json",
 };
 
@@ -36,7 +36,7 @@ export default function RootLayout({
       lang="pl"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col md:flex-row bg-[#E4EFEB] dark:bg-gray-950 text-gray-900 dark:text-gray-100 selection:bg-brand-violet/30 pb-16 md:pb-0">
+      <body className="min-h-full flex flex-col md:flex-row bg-gray-50 text-[#222222] selection:bg-brand-orange/30 pb-16 md:pb-0">
         <SidebarNav />
         <main className="flex-1 w-full min-h-screen md:ml-64 relative overflow-x-hidden">
           {children}

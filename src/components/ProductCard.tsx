@@ -23,25 +23,25 @@ export default function ProductCard({ id }: ProductCardProps) {
   const isProfitable = netProfit > 0;
 
   return (
-    <div className="bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl rounded-[2rem] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] mb-4 border border-white/60 dark:border-gray-800 transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
-      <div className="flex flex-col sm:flex-row gap-6 mb-6">
-        <div className="w-24 h-24 sm:w-32 sm:h-32 shrink-0 rounded-2xl overflow-hidden bg-gray-100 flex items-center justify-center shadow-inner">
+    <div className="bg-white rounded-2xl shadow-sm hover:shadow-md border border-gray-100 transition-all overflow-hidden flex flex-col h-full">
+      <div className="flex gap-4 p-5">
+        <div className="w-24 h-24 shrink-0 rounded-xl overflow-hidden bg-gray-50 flex items-center justify-center border border-gray-100">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={auction.thumbnailUrl} alt={auction.title} className="object-cover w-full h-full" />
+          <img src={auction.thumbnailUrl} alt={auction.title} className="object-contain w-full h-full aspect-square mix-blend-multiply" />
         </div>
-        <div className="flex flex-col justify-between flex-1">
+        <div className="flex flex-col justify-between flex-1 min-w-0">
           <div>
-            <h3 className="font-extrabold text-gray-900 dark:text-gray-100 text-lg sm:text-xl line-clamp-2 leading-tight tracking-tight mb-2">
+            <h3 className="font-semibold text-[#222222] text-sm line-clamp-2 leading-snug mb-1" title={auction.title}>
               {auction.title}
             </h3>
-            <div className="text-sm text-gray-500 font-medium">
-              Stan magazynowy: <span className="font-bold text-gray-900 dark:text-gray-200">{auction.stock} szt.</span>
+            <div className="text-xs text-gray-500 font-medium">
+              Stan: <span className="font-bold text-[#222222]">{auction.stock} szt.</span>
             </div>
           </div>
-          <div className="flex justify-between items-end mt-4">
+          <div className="flex justify-between items-end mt-2">
             <div>
-              <div className="text-xs text-gray-500 font-semibold mb-1 uppercase tracking-wider">Cena Sprzedaży</div>
-              <span className="font-extrabold text-brand-violet text-2xl tracking-tight">
+              <div className="text-[10px] text-gray-400 font-bold mb-0.5 uppercase tracking-wider">Cena Sprzedaży</div>
+              <span className="font-extrabold text-brand-orange text-lg tracking-tight">
                 {auction.price.toFixed(2)} zł
               </span>
             </div>
@@ -49,37 +49,37 @@ export default function ProductCard({ id }: ProductCardProps) {
         </div>
       </div>
 
-      <div className="bg-[#E4EFEB]/50 dark:bg-gray-950/50 rounded-2xl p-5 space-y-5 border border-white/30 dark:border-gray-800">
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-          <label className="text-sm font-bold text-gray-700 dark:text-gray-300">Cena zakupu netto</label>
+      <div className="bg-gray-50 p-4 space-y-4 border-t border-gray-100 mt-auto">
+        <div className="flex flex-row justify-between items-center gap-3">
+          <label className="text-xs font-bold text-gray-700">Cena zakupu netto</label>
           <div className="relative">
             <input 
               type="number" 
               value={auction.netPurchasePrice}
               onChange={(e) => updatePurchasePrice(id, parseFloat(e.target.value) || 0)}
-              className="w-32 bg-white/80 dark:bg-gray-800 border-none rounded-xl py-2 px-3 text-base font-bold text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-violet outline-none shadow-sm transition-all text-right"
+              className="w-24 bg-white border border-gray-200 rounded-lg py-1.5 px-2 text-sm font-bold text-[#222222] focus:ring-2 focus:ring-brand-orange outline-none transition-all text-right"
             />
-            <span className="absolute right-3 top-2.5 text-sm text-gray-400 pointer-events-none font-medium">zł</span>
+            <span className="absolute right-2 top-2 text-xs text-gray-400 pointer-events-none font-medium">zł</span>
           </div>
         </div>
 
         <div>
-          <label className="text-sm font-bold text-gray-700 dark:text-gray-300 block mb-3">Wyróżnienia (Symulacja Kosztu)</label>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <label className="text-[10px] font-bold text-gray-500 uppercase tracking-wider block mb-2">Wyróżnienia (Symulacja)</label>
+          <div className="grid grid-cols-1 gap-1.5">
             {availablePromos.map(promo => {
               const isActive = auction.activePromos.includes(promo.id);
               return (
-                <label key={promo.id} className={`flex items-center justify-between p-3 rounded-xl cursor-pointer transition-all border ${isActive ? 'bg-brand-violet/10 border-brand-violet/30 text-brand-violet' : 'bg-white/50 dark:bg-gray-800/50 border-transparent text-gray-600 dark:text-gray-400 hover:bg-white dark:hover:bg-gray-800'}`}>
-                  <div className="flex items-center gap-3">
+                <label key={promo.id} className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition-all border ${isActive ? 'bg-brand-orange/10 border-brand-orange/30 text-brand-orange' : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
+                  <div className="flex items-center gap-2">
                     <input 
                       type="checkbox" 
                       checked={isActive}
                       onChange={() => togglePromo(id, promo.id)}
-                      className="w-5 h-5 rounded border-gray-300 text-brand-violet focus:ring-brand-violet"
+                      className="w-4 h-4 rounded border-gray-300 text-brand-orange focus:ring-brand-orange"
                     />
-                    <span className="font-semibold text-sm">{promo.name}</span>
+                    <span className="font-semibold text-xs">{promo.name}</span>
                   </div>
-                  <span className="text-sm font-bold opacity-80">-{promo.cost.toFixed(2)} zł</span>
+                  <span className="text-xs font-bold opacity-80">-{promo.cost.toFixed(2)} zł</span>
                 </label>
               );
             })}
@@ -87,10 +87,10 @@ export default function ProductCard({ id }: ProductCardProps) {
         </div>
       </div>
 
-      <div className="mt-4 flex flex-col sm:flex-row sm:justify-between sm:items-center bg-gray-900 dark:bg-black rounded-2xl p-5 shadow-lg">
-        <span className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-1 sm:mb-0">Zysk na czysto</span>
-        <span className={`font-black text-3xl tracking-tight ${isProfitable ? 'text-green-400' : 'text-red-400'}`}>
-          {netProfit > 0 ? '+' : ''}{netProfit.toFixed(2)} <span className="text-xl">zł</span>
+      <div className="flex flex-row justify-between items-center bg-[#222222] p-4">
+        <span className="text-xs font-bold text-gray-300 uppercase tracking-widest">Zysk na czysto</span>
+        <span className={`font-black text-xl tracking-tight ${isProfitable ? 'text-green-400' : 'text-red-400'}`}>
+          {netProfit > 0 ? '+' : ''}{netProfit.toFixed(2)} <span className="text-sm font-bold">zł</span>
         </span>
       </div>
     </div>
