@@ -89,7 +89,7 @@ export default function MessagesPage() {
             <textarea 
               value={autoresponderMessage}
               onChange={(e) => setAutoresponderMessage(e.target.value)}
-              className="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-sm focus:ring-2 focus:ring-brand-orange outline-none resize-none h-24 text-[#222222]"
+              className="w-full bg-gray-50 border border-gray-200 rounded-none p-3 text-sm focus:ring-2 focus:ring-brand-orange outline-none resize-none h-24 text-[#222222]"
             />
             <p className="text-[10px] text-gray-500 mt-2 font-medium">Wiadomość zostanie wysłana automatycznie do nowych klientów.</p>
           </div>
@@ -130,7 +130,7 @@ export default function MessagesPage() {
               <div className="flex items-center gap-2">
                 <span className="font-bold text-sm text-[#222222]">{thread.buyer}</span>
                 {thread.isDifficult && (
-                  <div className="flex items-center gap-1 bg-red-50 text-red-600 text-[10px] font-bold px-2 py-0.5 rounded-md border border-red-100">
+                  <div className="flex items-center gap-1 bg-red-50 text-red-600 text-[10px] font-bold px-2 py-0.5 rounded-none border border-red-100">
                     <AlertTriangle className="w-3 h-3" />
                     Trudny Klient
                   </div>

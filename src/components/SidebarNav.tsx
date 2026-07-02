@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Home, ShoppingCart, MessageCircle, Box, LogOut, Settings } from "lucide-react";
+import { Home, ShoppingCart, MessageCircle, Box, LogOut, Settings, Package } from "lucide-react";
 import { createBrowserClient } from "@supabase/ssr";
 
 export default function SidebarNav() {
@@ -47,6 +47,7 @@ export default function SidebarNav() {
 
         <nav className="flex flex-col gap-2">
           <NavItem href="/dashboard" icon={<Home />} label="Pulpit & Oferty" isActive={pathname === '/dashboard'} />
+          <NavItem href="/dashboard/products/new" icon={<Package />} label="Dodaj Produkt" isActive={pathname === '/dashboard/products/new'} />
           <NavItem href="/dashboard/orders" icon={<ShoppingCart />} label="Zamówienia" isActive={pathname === '/dashboard/orders'} />
           <NavItem href="/messages" icon={<MessageCircle />} label="Wiadomości" isActive={pathname === '/messages'} />
         </nav>
