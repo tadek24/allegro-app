@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Home, TrendingUp, BarChart, MessageCircle, Box, LogOut, Settings } from "lucide-react";
+import { Home, ShoppingCart, MessageCircle, Box, LogOut, Settings } from "lucide-react";
 import { createBrowserClient } from "@supabase/ssr";
 
 export default function SidebarNav() {
@@ -29,10 +29,10 @@ export default function SidebarNav() {
       {/* Mobile Bottom Nav */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 pb-safe shadow-none z-50">
         <div className="flex justify-around items-center h-16 px-2">
-          <NavItem href="/dashboard" icon={<Home />} label="Aukcje" isActive={pathname === '/dashboard'} isMobile />
-          <NavItem href="/analysis" icon={<TrendingUp />} label="Analiza" isActive={pathname === '/analysis'} isMobile />
-          <NavItem href="/ads" icon={<BarChart />} label="Ads" isActive={pathname === '/ads'} isMobile />
+          <NavItem href="/dashboard" icon={<Home />} label="Pulpit" isActive={pathname === '/dashboard'} isMobile />
+          <NavItem href="/dashboard/orders" icon={<ShoppingCart />} label="Zamówienia" isActive={pathname === '/dashboard/orders'} isMobile />
           <NavItem href="/messages" icon={<MessageCircle />} label="Wiadomości" isActive={pathname === '/messages'} isMobile />
+          <NavItem href="/dashboard/settings" icon={<Settings />} label="Ustawienia" isActive={pathname === '/dashboard/settings'} isMobile />
         </div>
       </nav>
 
@@ -46,9 +46,8 @@ export default function SidebarNav() {
         </div>
 
         <nav className="flex flex-col gap-2">
-          <NavItem href="/dashboard" icon={<Home />} label="Dashboard" isActive={pathname === '/dashboard'} />
-          <NavItem href="/analysis" icon={<TrendingUp />} label="Analiza Konkurencji" isActive={pathname === '/analysis'} />
-          <NavItem href="/ads" icon={<BarChart />} label="Kampanie Ads" isActive={pathname === '/ads'} />
+          <NavItem href="/dashboard" icon={<Home />} label="Pulpit & Oferty" isActive={pathname === '/dashboard'} />
+          <NavItem href="/dashboard/orders" icon={<ShoppingCart />} label="Zamówienia" isActive={pathname === '/dashboard/orders'} />
           <NavItem href="/messages" icon={<MessageCircle />} label="Wiadomości" isActive={pathname === '/messages'} />
         </nav>
 
