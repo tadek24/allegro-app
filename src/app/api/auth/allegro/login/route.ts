@@ -8,7 +8,7 @@ export async function GET(request: Request) {
   }
 
   const redirectUri = 'https://allegro-app.vercel.app/api/auth/allegro/callback';
-  const allegroAuthUrl = `https://allegro.pl/auth/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}`;
+  const allegroAuthUrl = `https://allegro.pl/auth/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`;
 
   return NextResponse.redirect(allegroAuthUrl);
 }

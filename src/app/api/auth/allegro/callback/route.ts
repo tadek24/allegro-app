@@ -2,8 +2,7 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabase/server';
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const code = searchParams.get('code');
+  const code = new URL(request.url).searchParams.get('code');
   
   if (!code) {
     return NextResponse.json({ error: 'Brak kodu autoryzacyjnego' }, { status: 400 });
@@ -20,13 +19,17 @@ export async function GET(request: Request) {
   try {
     const authHeader = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
     
-    // Wymiana code na tokeny w Allegro
-    const tokenResponse = await fetch(`https://allegro.pl/auth/oauth/token?grant_type=authorization_code&code=${code}&redirect_uri=${encodeURIComponent(redirectUri)}`, {
+    const tokenResponse = await fetch('https://allegro.pl/auth/oauth/token', {
       method: 'POST',
       headers: {
         'Authorization': `Basic ${authHeader}`,
         'Content-Type': 'application/x-www-form-urlencoded'
-      }
+      },
+      body: new URLSearchParams({
+        grant_type: 'authorization_code',
+        code: code,
+        redirect_uri: redirectUri
+      }).toString()
     });
 
     if (!tokenResponse.ok) {
@@ -36,33 +39,21 @@ export async function GET(request: Request) {
     }
 
     const tokenData = await tokenResponse.json();
-    const accessToken = tokenData.access_token;
-    const refreshToken = tokenData.refresh_token;
 
-    // Zapis tokenów w bazie dla obecnie zalogowanego użytkownika
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
     if (user) {
-      const { error: dbError } = await supabase
+      await supabase
         .from('allegro_integrations')
         .upsert({ 
           user_id: user.id, 
-          access_token: accessToken, 
-          refresh_token: refreshToken 
+          access_token: tokenData.access_token, 
+          refresh_token: tokenData.refresh_token 
         });
-
-      if (dbError) {
-        console.error('Database error saving tokens:', dbError);
-      }
     }
 
-    // Niezależnie od wyniku bazy, wracamy do dashboard
-    const url = request.url;
-    const redirectUrl = new URL('/dashboard', url);
-    redirectUrl.searchParams.set('integration', 'success');
-
-    return NextResponse.redirect(redirectUrl);
+    return NextResponse.redirect(new URL('/dashboard?integration=success', request.url));
   } catch (err: any) {
     console.error('Callback error:', err);
     return NextResponse.json({ error: 'Wewnętrzny błąd serwera' }, { status: 500 });
