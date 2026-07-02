@@ -113,12 +113,12 @@ export default function SettingsPage() {
                 <p className="text-sm text-gray-500 font-medium">Musisz zintegrować konto, aby pobierać oferty i wiadomości.</p>
               </div>
             </div>
-            <Link 
+            <a 
               href="/api/auth/allegro/login"
               className="flex items-center justify-center gap-2 bg-brand-orange hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-none transition-none w-full md:w-auto"
             >
               Zintegruj Konto <ArrowRight className="w-5 h-5" />
-            </Link>
+            </a>
           </div>
         )}
       </div>

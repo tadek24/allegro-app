@@ -138,12 +138,12 @@ export default function DashboardPage() {
           <p className="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl mx-auto font-medium">
             Zintegruj swoje konto Allegro jednym kliknięciem i zyskaj dostęp do pełnego ekosystemu analitycznego oraz zarządzania.
           </p>
-          <Link 
+          <a 
             href="/api/auth/allegro/login"
             className="inline-flex items-center gap-3 bg-brand-orange hover:bg-orange-600 text-white font-bold text-lg py-4 px-10 rounded-none transition-all shadow-none hover:shadow-none"
           >
             Zintegruj Konto Allegro <ArrowRight className="w-6 h-6" />
-          </Link>
+          </a>
         </div>
       </div>
     );

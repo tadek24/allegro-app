@@ -11,8 +11,7 @@ export async function GET(request: Request) {
 
   const clientId = process.env.ALLEGRO_CLIENT_ID;
   const clientSecret = process.env.ALLEGRO_CLIENT_SECRET;
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const redirectUri = `${appUrl}/api/auth/allegro/callback`;
+  const redirectUri = 'https://allegro-app.vercel.app/api/auth/allegro/callback';
 
   if (!clientId || !clientSecret) {
     return NextResponse.json({ error: 'Błąd konfiguracji kluczy Allegro' }, { status: 500 });
