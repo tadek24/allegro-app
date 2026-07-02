@@ -21,9 +21,9 @@ function IntegrationCheck() {
 }
 
 const SkeletonLoader = () => (
-  <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex flex-col h-full animate-pulse">
+  <div className="bg-white rounded-none shadow-none border border-gray-100 p-5 flex flex-col h-full animate-pulse">
     <div className="flex gap-4">
-      <div className="w-24 h-24 bg-gray-200 rounded-xl shrink-0"></div>
+      <div className="w-24 h-24 bg-gray-200 rounded-none shrink-0"></div>
       <div className="flex-1 space-y-3 py-1">
         <div className="h-4 bg-gray-200 rounded w-3/4"></div>
         <div className="h-3 bg-gray-200 rounded w-1/2"></div>
@@ -85,8 +85,8 @@ export default function DashboardPage() {
       <>
         <Suspense fallback={null}><IntegrationCheck /></Suspense>
         <div className="p-6 md:p-12 min-h-screen flex items-center justify-center bg-gray-50">
-          <div className="w-full max-w-4xl bg-white rounded-3xl p-10 md:p-16 shadow-md border border-gray-100 text-center relative overflow-hidden">
-            <div className="mx-auto bg-brand-orange/10 text-brand-orange w-24 h-24 flex items-center justify-center rounded-2xl mb-8">
+          <div className="w-full max-w-4xl bg-white rounded-none p-10 md:p-16 shadow-md border border-gray-100 text-center relative overflow-hidden">
+            <div className="mx-auto bg-brand-orange/10 text-brand-orange w-24 h-24 flex items-center justify-center rounded-none mb-8">
               <ShieldCheck className="w-12 h-12" />
             </div>
             <h2 className="text-4xl md:text-5xl font-extrabold text-[#222222] mb-6 tracking-tight leading-tight">
@@ -97,7 +97,7 @@ export default function DashboardPage() {
             </p>
             <Link 
               href="/api/auth/allegro/login"
-              className="inline-flex items-center gap-3 bg-brand-orange hover:bg-orange-600 text-white font-bold text-lg py-4 px-10 rounded-2xl transition-all shadow-sm hover:shadow-md"
+              className="inline-flex items-center gap-3 bg-brand-orange hover:bg-orange-600 text-white font-bold text-lg py-4 px-10 rounded-none transition-all shadow-none hover:shadow-none"
             >
               Zintegruj Konto Allegro <ArrowRight className="w-6 h-6" />
             </Link>
@@ -117,17 +117,17 @@ export default function DashboardPage() {
             <p className="text-base text-gray-500 font-medium mt-1">Zarządzaj swoimi ofertami i marżą wprost z Allegro</p>
           </div>
           <div className="flex gap-2">
-            <button className="bg-white rounded-xl shadow-sm border border-gray-200 p-3 text-gray-500 hover:text-brand-orange hover:border-brand-orange transition-all">
+            <button className="bg-white rounded-none shadow-none border border-gray-200 p-3 text-gray-500 hover:text-brand-orange hover:border-brand-orange transition-all">
               <Filter className="w-5 h-5" />
             </button>
-            <button className="bg-white rounded-xl shadow-sm border border-gray-200 p-3 text-gray-500 hover:text-brand-orange hover:border-brand-orange transition-all">
+            <button className="bg-white rounded-none shadow-none border border-gray-200 p-3 text-gray-500 hover:text-brand-orange hover:border-brand-orange transition-all">
               <ArrowUpDown className="w-5 h-5" />
             </button>
           </div>
         </header>
 
         {error && (
-          <div className="mb-8 bg-red-50 text-red-600 p-4 rounded-xl flex items-center gap-3 border border-red-100">
+          <div className="mb-8 bg-red-50 text-red-600 p-4 rounded-none flex items-center gap-3 border border-red-100">
             <AlertCircle className="w-6 h-6 shrink-0" />
             <span className="font-semibold">{error}</span>
           </div>
@@ -143,7 +143,7 @@ export default function DashboardPage() {
             <SkeletonLoader />
           </div>
         ) : auctions.length === 0 && !error ? (
-          <div className="text-center py-20 bg-white rounded-3xl border border-gray-100 shadow-sm">
+          <div className="text-center py-20 bg-white rounded-none border border-gray-100 shadow-none">
             <p className="text-gray-500 font-medium text-lg">Brak ofert do wyświetlenia.</p>
           </div>
         ) : (

@@ -9,33 +9,63 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Brak kodu autoryzacyjnego' }, { status: 400 });
   }
 
-  // Wymiana code na tokeny (MOCK)
-  // const credentials = btoa(`${process.env.ALLEGRO_CLIENT_ID}:${process.env.ALLEGRO_CLIENT_SECRET}`);
-  // fetch('https://allegro.pl/auth/oauth/token', ...)
-  
-  const mockAccessToken = 'mock_access_token_' + Math.random().toString(36).substr(2, 9);
-  const mockRefreshToken = 'mock_refresh_token_' + Math.random().toString(36).substr(2, 9);
+  const clientId = process.env.ALLEGRO_CLIENT_ID;
+  const clientSecret = process.env.ALLEGRO_CLIENT_SECRET;
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const redirectUri = `${appUrl}/api/auth/allegro/callback`;
 
-  // Weryfikacja sesji w Supabase
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
-  if (user) {
-    // Zapisujemy powiązanie do bazy
-    await supabase
-      .from('allegro_integrations')
-      .upsert({ 
-        user_id: user.id, 
-        access_token: mockAccessToken, 
-        refresh_token: mockRefreshToken 
-      });
+  if (!clientId || !clientSecret) {
+    return NextResponse.json({ error: 'Błąd konfiguracji kluczy Allegro' }, { status: 500 });
   }
 
-  // Niezależnie od faktycznego zapisu, przekierowujemy użytkownika do panelu
-  const url = request.url;
-  const redirectUrl = new URL('/dashboard', url);
-  // Dodajemy flagę, by pokazać w UI, że integracja zakończyła się sukcesem (używamy tego do zasilenia stanu)
-  redirectUrl.searchParams.set('integration', 'success');
+  try {
+    const authHeader = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
+    
+    // Wymiana code na tokeny w Allegro
+    const tokenResponse = await fetch(`https://allegro.pl/auth/oauth/token?grant_type=authorization_code&code=${code}&redirect_uri=${encodeURIComponent(redirectUri)}`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Basic ${authHeader}`,
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
 
-  return NextResponse.redirect(redirectUrl);
+    if (!tokenResponse.ok) {
+      const errorText = await tokenResponse.text();
+      console.error('Allegro token error:', errorText);
+      return NextResponse.json({ error: 'Błąd wymiany tokenu w Allegro API' }, { status: tokenResponse.status });
+    }
+
+    const tokenData = await tokenResponse.json();
+    const accessToken = tokenData.access_token;
+    const refreshToken = tokenData.refresh_token;
+
+    // Zapis tokenów w bazie dla obecnie zalogowanego użytkownika
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (user) {
+      const { error: dbError } = await supabase
+        .from('allegro_integrations')
+        .upsert({ 
+          user_id: user.id, 
+          access_token: accessToken, 
+          refresh_token: refreshToken 
+        });
+
+      if (dbError) {
+        console.error('Database error saving tokens:', dbError);
+      }
+    }
+
+    // Niezależnie od wyniku bazy, wracamy do dashboard
+    const url = request.url;
+    const redirectUrl = new URL('/dashboard', url);
+    redirectUrl.searchParams.set('integration', 'success');
+
+    return NextResponse.redirect(redirectUrl);
+  } catch (err: any) {
+    console.error('Callback error:', err);
+    return NextResponse.json({ error: 'Wewnętrzny błąd serwera' }, { status: 500 });
+  }
 }

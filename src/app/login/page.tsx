@@ -62,7 +62,7 @@ export default function LoginPage() {
         <div className="absolute top-[-10%] left-[-10%] w-[120%] h-[120%] bg-[url('https://placehold.co/1000x1000?text=Pattern')] opacity-10 mix-blend-overlay"></div>
         <div className="relative z-10 flex flex-col h-full justify-between">
           <div className="flex items-center gap-3">
-            <div className="bg-white/20 p-2 rounded-xl">
+            <div className="bg-white/20 p-2 rounded-none">
               <Box className="w-8 h-8" />
             </div>
             <span className="font-bold text-2xl tracking-tight">E-Prom Allegro</span>
@@ -85,10 +85,10 @@ export default function LoginPage() {
 
       {/* Right panel - Auth Form */}
       <div className="flex-1 flex flex-col justify-center items-center p-8 lg:p-24 relative z-10">
-        <div className="w-full max-w-md bg-white p-8 rounded-3xl shadow-md border border-gray-100">
+        <div className="w-full max-w-md bg-white p-8 rounded-none shadow-none border border-gray-100">
           
           <div className="flex items-center gap-3 mb-8 lg:hidden">
-            <div className="bg-brand-orange text-white p-2 rounded-xl">
+            <div className="bg-brand-orange text-white p-2 rounded-none">
               <Box className="w-6 h-6" />
             </div>
             <span className="font-bold text-xl tracking-tight text-[#222222]">E-Prom Allegro</span>
@@ -109,7 +109,7 @@ export default function LoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-white border border-gray-300 rounded-xl px-4 py-3 text-[#222222] focus:outline-none focus:ring-2 focus:ring-brand-orange/50 focus:border-brand-orange transition-all"
+                className="w-full bg-white border border-gray-300 rounded-none px-4 py-3 text-[#222222] focus:outline-none focus:ring-2 focus:ring-brand-orange/50 focus:border-brand-orange transition-all"
                 placeholder="name@company.com"
               />
             </div>
@@ -120,7 +120,7 @@ export default function LoginPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-white border border-gray-300 rounded-xl px-4 py-3 text-[#222222] focus:outline-none focus:ring-2 focus:ring-brand-orange/50 focus:border-brand-orange transition-all"
+                className="w-full bg-white border border-gray-300 rounded-none px-4 py-3 text-[#222222] focus:outline-none focus:ring-2 focus:ring-brand-orange/50 focus:border-brand-orange transition-all"
                 placeholder="••••••••"
               />
             </div>
@@ -140,7 +140,7 @@ export default function LoginPage() {
             <button 
               type="submit" 
               disabled={loading}
-              className="w-full bg-brand-orange hover:bg-orange-600 text-white font-bold py-3.5 px-4 rounded-xl transition-all flex items-center justify-center gap-2 mt-2 shadow-md disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full bg-brand-orange hover:bg-orange-600 text-white font-bold py-3.5 px-4 rounded-none transition-all flex items-center justify-center gap-2 mt-2 shadow-none disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />

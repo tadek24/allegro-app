@@ -5,7 +5,7 @@ import { useStore } from "@/store/useStore";
 import { MessageSquare, AlertTriangle, Send, AlertCircle } from "lucide-react";
 
 const SkeletonLoader = () => (
-  <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex flex-col gap-2 animate-pulse">
+  <div className="bg-white rounded-none p-4 shadow-none border border-gray-100 flex flex-col gap-2 animate-pulse">
     <div className="h-4 bg-gray-200 rounded w-1/4"></div>
     <div className="h-3 bg-gray-200 rounded w-3/4 mt-2"></div>
     <div className="mt-2 flex justify-between items-center">
@@ -60,7 +60,7 @@ export default function MessagesPage() {
       </header>
 
       {/* Autoresponder Settings */}
-      <div className="bg-white rounded-xl p-5 mb-6 shadow-sm border border-gray-100">
+      <div className="bg-white rounded-none p-5 mb-6 shadow-none border border-gray-100">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <MessageSquare className="w-5 h-5 text-brand-orange" />
@@ -99,7 +99,7 @@ export default function MessagesPage() {
       <h3 className="font-bold text-[#222222] mb-4 px-1">Ostatnie wątki</h3>
 
       {error && (
-        <div className="mb-6 bg-red-50 text-red-600 p-4 rounded-xl flex items-center gap-3 border border-red-100">
+        <div className="mb-6 bg-red-50 text-red-600 p-4 rounded-none flex items-center gap-3 border border-red-100">
           <AlertCircle className="w-6 h-6 shrink-0" />
           <span className="font-semibold text-sm">{error}</span>
         </div>
@@ -113,16 +113,16 @@ export default function MessagesPage() {
             <SkeletonLoader />
           </>
         ) : threads.length === 0 && !error ? (
-          <div className="text-center py-12 bg-white rounded-xl border border-gray-100 shadow-sm">
+          <div className="text-center py-12 bg-white rounded-none border border-gray-100 shadow-none">
             <p className="text-gray-500 font-medium text-sm">Brak wiadomości do wyświetlenia.</p>
           </div>
         ) : (
           threads.map((thread) => (
             <div 
               key={thread.id} 
-              className={`bg-white rounded-xl p-4 shadow-sm border ${
+              className={`bg-white rounded-none p-4 shadow-none border ${
                 thread.isDifficult ? 'border-red-200' : 'border-gray-100'
-              } flex flex-col gap-2 relative transition-all hover:shadow-md`}
+              } flex flex-col gap-2 relative transition-all hover:shadow-none`}
             >
               {thread.unread && (
                 <div className="absolute top-4 right-4 w-2.5 h-2.5 bg-brand-orange rounded-full"></div>

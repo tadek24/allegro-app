@@ -23,11 +23,11 @@ export default function ProductCard({ id }: ProductCardProps) {
   const isProfitable = netProfit > 0;
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm hover:shadow-md border border-gray-100 transition-all overflow-hidden flex flex-col h-full">
+    <div className="bg-white rounded-none border border-gray-200 flex flex-col h-full shadow-none">
       <div className="flex gap-4 p-5">
-        <div className="w-24 h-24 shrink-0 rounded-xl overflow-hidden bg-gray-50 flex items-center justify-center border border-gray-100">
+        <div className="w-24 h-24 shrink-0 rounded-none overflow-hidden bg-white flex items-center justify-center border border-gray-200">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={auction.thumbnailUrl} alt={auction.title} className="object-contain w-full h-full aspect-square mix-blend-multiply" />
+          <img src={auction.thumbnailUrl} alt={auction.title} className="object-contain w-full h-full aspect-square" />
         </div>
         <div className="flex flex-col justify-between flex-1 min-w-0">
           <div>
@@ -49,7 +49,7 @@ export default function ProductCard({ id }: ProductCardProps) {
         </div>
       </div>
 
-      <div className="bg-gray-50 p-4 space-y-4 border-t border-gray-100 mt-auto">
+      <div className="bg-gray-50 p-4 space-y-4 border-t border-gray-200 mt-auto">
         <div className="flex flex-row justify-between items-center gap-3">
           <label className="text-xs font-bold text-gray-700">Cena zakupu netto</label>
           <div className="relative">
@@ -57,7 +57,7 @@ export default function ProductCard({ id }: ProductCardProps) {
               type="number" 
               value={auction.netPurchasePrice}
               onChange={(e) => updatePurchasePrice(id, parseFloat(e.target.value) || 0)}
-              className="w-24 bg-white border border-gray-200 rounded-lg py-1.5 px-2 text-sm font-bold text-[#222222] focus:ring-2 focus:ring-brand-orange outline-none transition-all text-right"
+              className="w-24 bg-white border border-gray-200 rounded-none py-1.5 px-2 text-sm font-bold text-[#222222] focus:ring-1 focus:ring-brand-orange focus:border-brand-orange outline-none transition-none text-right shadow-none"
             />
             <span className="absolute right-2 top-2 text-xs text-gray-400 pointer-events-none font-medium">zł</span>
           </div>
@@ -69,13 +69,13 @@ export default function ProductCard({ id }: ProductCardProps) {
             {availablePromos.map(promo => {
               const isActive = auction.activePromos.includes(promo.id);
               return (
-                <label key={promo.id} className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition-all border ${isActive ? 'bg-brand-orange/10 border-brand-orange/30 text-brand-orange' : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
+                <label key={promo.id} className={`flex items-center justify-between p-2 rounded-none cursor-pointer border ${isActive ? 'bg-orange-50 border-brand-orange text-brand-orange' : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
                   <div className="flex items-center gap-2">
                     <input 
                       type="checkbox" 
                       checked={isActive}
                       onChange={() => togglePromo(id, promo.id)}
-                      className="w-4 h-4 rounded border-gray-300 text-brand-orange focus:ring-brand-orange"
+                      className="w-4 h-4 rounded-none border-gray-300 text-brand-orange focus:ring-brand-orange focus:ring-1"
                     />
                     <span className="font-semibold text-xs">{promo.name}</span>
                   </div>
@@ -87,7 +87,7 @@ export default function ProductCard({ id }: ProductCardProps) {
         </div>
       </div>
 
-      <div className="flex flex-row justify-between items-center bg-[#222222] p-4">
+      <div className="flex flex-row justify-between items-center bg-[#222222] p-4 border-t border-gray-800">
         <span className="text-xs font-bold text-gray-300 uppercase tracking-widest">Zysk na czysto</span>
         <span className={`font-black text-xl tracking-tight ${isProfitable ? 'text-green-400' : 'text-red-400'}`}>
           {netProfit > 0 ? '+' : ''}{netProfit.toFixed(2)} <span className="text-sm font-bold">zł</span>
